@@ -1,18 +1,112 @@
-
 //jhh
 
 /*
+//login controler
+
+
+class LoginApiController extends GetxController{
+var token="".obs;
+final isLoading=false.obs;
+
+Future getLoginData({required String url,required Map<String, dynamic> data})async{
+try{
+isLoading(true);
+var loginResponse=await ApiCaling.callPostApi(url: url, data: data);
+var success=LoginData.fromJson(loginResponse);
+token.value=result.accessToken;
+}
+
+finally{
+isLoading(false);
+}
+}
+}
 
 
 
-ghjkhnjhnvjmnv
+//num otp classmodel
 
-oijul.khnb
-utyjukjgghj
 
-oiftuktfbn
-hgjhghhgj
- */
+NumberOtp numberOtpFromJson(String srt)=>NumberOtp.fromJson(json.decode(str));
+String numberOtpToJson(NumberOtp data)=>json.encode(data.toJson());
+
+class NumberOtp{
+NumberOtp({
+required this.phoneNo,
+required this.otp,
+});
+String phoneNo;
+String otp;
+
+factory NumberOtp.fromJson(Map<String, dynamic> json)=>NumberOtp(
+phoneNo: json["phoneNo"],
+otp:json["otp"],
+);
+Map<String, dynamic> toJson()=>{
+"phoneNo":phoneNo,
+"otp":otp,
+};
+}
+
+
+//login page
+
+var loginData=Get.put<LoginApiController>(LoginApiController());
+
+
+try{
+await loginData.getLoginData(url: Allurl.loginUrl.value, data: data).then((val)=>Get.off(()=>
+OfferPage(token: loginData.token.toString())));
+
+}catch(e){
+print(e.toString());
+Get.snackbar("error",e.toString(),
+snackPosition: SnackPosition.BOTTOM,
+colorText: Colors.black,
+backgroundColor: Colors.red);
+}
+
+
+
+//ofer controlr
+
+class offerApiController extends GetxController{
+var data=<Offer>[].obs;
+final isLoading=true.obs;
+Future getOfferData({required String url, required String token})async{
+try{
+isLoading(true);
+var response=await Apicaling.callGetApi(url: url,token:token);
+var success=Offerdata.fromJson(response)
+data.assignAll(success.offers);
+}
+finally{
+isLoading(false);
+}
+
+}
+
+}
+
+
+//ofer page
+
+var offerData=Get.put<offerApiController>(offerApiController());
+
+@override
+void initState(){
+super.initState();
+getOfferData();
+}
+
+Future<void> getOfferData() async{
+offerData.getOfferData(url: Allapi.offerUrl.value,token: widget.token);
+}
+
+
+
+
+*/
 
 import 'package:dummyjson/cart.dart';
 import 'package:dummyjson/post.dart';
@@ -38,6 +132,7 @@ class mainpage extends StatefulWidget {
 
 class _mainpageState extends State<mainpage> {
   bool sts = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,9 +254,6 @@ class _mainpageState extends State<mainpage> {
                         color: Colors.deepPurple,
                         fontStyle: FontStyle.italic),
                   )),
-              
-
-
             ],
           ),
         ),
